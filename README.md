@@ -3,7 +3,7 @@
 -	Ezequiel Teixeira Costa
 -	Wictor Gabriel de Aquino Mourão
 
-### Disciplinas Envolvidas:
+### Disciplinas Cursadas:
 - ARQ | BD II | EST II | INT I | PROJ i | SO | ES II
 
 
