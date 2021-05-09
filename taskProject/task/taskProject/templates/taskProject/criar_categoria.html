@@ -1,0 +1,62 @@
+{% load static%}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Tasks</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'taskProject/css/criar-tarefa.css' %}">
+
+
+</head>
+<body>
+
+    <div id="corpo">
+        <div class="top">
+            <div class="title">
+                <h1>Tasks</h1>
+            </div>
+            <nav class="nav-bar">
+                <ul>
+                    <li><a href="#">HOME</a></li>
+                    <li><a href="#">GRÁFICO</a></li>
+                    <li><a href="#">DICAS</a></li>
+                    <li><a href="#">AVISE-ME</a></li>
+                    <li><a href="#">SOBRE</a></li>
+                </ul>
+            </nav>
+
+        </div>
+        <div class="content">
+
+            <div class="title">
+                <h1>Criar Categoria</h1>
+            </div>
+            <div class="form">
+                <form action="" method="post">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-1">
+                            <label for="nome">Nome:</label>
+                            <input type="text" name="nome"  required = "" >
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="footer">
+                        <div class="row">
+                            <div class = "buttons">
+                                <button type="button" class = "btn btn-cancel">Cancelar</button>
+                                <button type="submit" class = "btn btn-ok">Confirmar</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
