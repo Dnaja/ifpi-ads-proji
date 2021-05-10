@@ -45,7 +45,7 @@
                     <div class="row">
                         <div class="col-3">
                             <label for="descricao">Descrição:</label>
-                            <textarea name="descricao" cols="75" rows="10">{{quadro.descricao}}</textarea>
+                            <textarea name="descricao" cols="75" rows="10">{{quadro.descricao |default_if_none:"" }}</textarea>
                         </div>
                     </div>
                     <br>
