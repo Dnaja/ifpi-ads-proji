@@ -28,8 +28,6 @@ def editar_quadro(request,id):
         form = QuadroForm(request.POST, instance=quadro)
         buscar_repetido = Quadro.objects.filter(nome=quadro.nome)
         if form.is_valid():
-            if len(buscar_repetido) > 0:
-                return redirect('exibir_quadro')
             form.save()
             return redirect('index')
 
