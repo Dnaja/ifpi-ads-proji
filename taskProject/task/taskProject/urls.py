@@ -11,7 +11,7 @@ urlpatterns = [
     path('categoria/cadastrar/', views.cadastro_categoria, name='cadastro_categoria'),
     path('categoria/', views.exibir_categoria, name='exibir_categoria'),
     path('categoria/editar/<int:id>/', views.editar_categoria, name='editar_categoria'),
-    path('categoria/excluir/<int:id>/', views.excluir_categoria, name='excluir_categoria'),
+    path('categoria/excluir/', views.excluir_categoria, name='excluir_categoria'),
 ]
 
 
