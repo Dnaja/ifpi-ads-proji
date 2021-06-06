@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,reverse
 from .forms import QuadroForm,CategoriaForm
 from .models import Quadro,Categoria
 from django.contrib import messages
@@ -11,12 +11,14 @@ def cadastro_quadro(request):
     if request.method == "POST":
         form = QuadroForm(request.POST)
         nome = request.POST['nome']
-        buscar_repetido = Quadro.objects.filter(nome__iexact = nome)
+        buscar_repetido = Quadro.objects.filter(nome__iexact = nome).count()
         if form.is_valid():
-            if len(buscar_repetido) > 0:
-                return redirect('cadastro_quadro')
+            if buscar_repetido > 0:
+                messages.warning(request,"Quadro já existe!")
+                return redirect('index')
             else:
                 form.save()
+                messages.success(request,"Quadro cadastrado")
                 return redirect('index')
 
     #else:
@@ -27,11 +29,14 @@ def editar_quadro(request,id):
     if request.method == "POST":
         quadro = Quadro.objects.get(pk = id)
         form = QuadroForm(request.POST, instance=quadro)
-        buscar_repetido = Quadro.objects.filter(nome__iexact=quadro.nome)
+        buscar_repetido = Quadro.objects.filter(nome__iexact=request.POST['nome']).exclude(pk = id).count()
         print(buscar_repetido)
         if form.is_valid():
-            
+            if (buscar_repetido > 0):
+                messages.warning(request,"Quadro já cadastrado")
+                return redirect('index')
             form.save()
+            messages.success(request,"Quadro alterado")
             return redirect('index')
 
     else:
@@ -42,10 +47,14 @@ def editar_quadro(request,id):
                        })
     #return render(request,'taskProject/criar_quadro.html')
 
-def excluir_quadro(request,id):
-    #quadro = Quadro.objects.get(pk = id)
-    quadro = Quadro.objects.filter(pk=id).delete()
-    return redirect('index')
+
+
+def excluir_quadro(request):
+    print(request.POST)
+    if request.method == "POST":
+            quadro = Quadro.objects.filter(pk=request.POST['quadro_id']).delete()
+            messages.success(request,"Quadro excluído!")
+            return redirect('index')
 
 
 def cadastro_categoria(request):
@@ -55,9 +64,10 @@ def cadastro_categoria(request):
         buscar_repetido = Categoria.objects.filter(nome__iexact = nome).count()
         if form.is_valid():
             if buscar_repetido > 0:
-                messages.error(request,"Categoria já existe!")
-                return redirect('cadastro_categoria')
+                messages.warning(request,"Categoria já existe!")
+                return redirect('exibir_categoria')
             form.save()
+            messages.success(request,"Categoria criada com sucesso!")
             return redirect('exibir_categoria')
 
     #else:
@@ -73,11 +83,14 @@ def editar_categoria(request,id):
     if request.method == "POST":
         categoria = Categoria.objects.get(pk = id)
         form = CategoriaForm(request.POST, instance=categoria)
-        buscar_repetido = Categoria.objects.filter(nome=categoria.nome).count()
+        buscar_repetido = Categoria.objects.filter(nome__iexact=request.POST['nome']).exclude(pk = id).count()
+        print(buscar_repetido)
         if form.is_valid():
             if buscar_repetido > 0:
+                messages.warning(request,"Categoria já existe!")
                 return redirect('exibir_categoria')
             form.save()
+            messages.success(request,"Categoria alterada!")
             return redirect('exibir_categoria')
 
     else:
@@ -91,10 +104,10 @@ def editar_categoria(request,id):
 
 
 def excluir_categoria(request):
-    print("cheguei ate aqui")
     if request.method == "POST":
         print(request.POST)
         categoria = Categoria.objects.filter(pk=request.POST['categoria_id']).delete()
+        messages.success(request,"Categoria excluída!")
         return redirect('exibir_categoria')
 
     

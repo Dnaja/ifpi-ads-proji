@@ -26,16 +26,18 @@
                     </ul>
                 </nav>
 
-            </div>
+    </div>
     <div class="container">
-        <div >
+      <div>
+      {% include 'messagens.html' %}
+      
         
-        <div >
+      <div >
         <h3 style = "display: inline-block"><strong>Categorias</strong></h3>
         <a style = "display: inline-block; margin-left: 850px; padding:10px; color:#fff; border-radius: 5px; margin-top:10px;margin-bottom:3px; " type = "button" class = "bg-primary" href = "{% url 'cadastro_categoria' %}" >Adicionar</a>
-        </div>
+      </div>
 
-        <div>
+      <div>
             <table class="table table-dark">
                   <thead>
                     <tr>
@@ -66,10 +68,7 @@
                   </tbody>
 
                 </table>
-
-
-
-        </div>
+      </div>
         </div>
     </div>
 
