@@ -11,8 +11,11 @@
                     <form action="" method="post">{% csrf_token %}
                         <div class="row">
                             <div class="col">
-                                <label for="nome">Nome:</label>
-                                <input type="text" name="nome"  required = "" >
+                                <div class="form-group">
+                                    <label for="nome">Nome:</label>
+                                    <input type="text" name="nome"  id = "nome"  class="form-control" required = "" >    
+                                </div>
+                                
                             </div>
                         </div>
 
@@ -20,8 +23,7 @@
                         <div class="footer">
                             <div class="row">
                                 <div class = "buttons">
-                                    <a style = "text-decoration: none; padding:14px;  border-radius: 5px;background-color : #fff; width: 150px;" class ="btn bg-primary"  href="{% url 'exibir_categoria'  %}">Voltar</a>
-                                    {% comment "" %}<button  type="button" class = "btn btn-cancel">Cancelar</button>{% endcomment %}
+                                    <a  class ="btn bg-primary"  href="{% url 'exibir_categoria'  %}">Voltar</a>
                                     <button type="submit" class = "btn btn-ok">Confirmar</button>
 
                                 </div>

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,reverse
-from .forms import QuadroForm,CategoriaForm
-from .models import Quadro,Categoria
+from .forms import QuadroForm,CategoriaForm, TarefaForm
+from .models import Quadro,Categoria, Tarefa
 from django.contrib import messages
 
 def index(request):
@@ -110,4 +110,30 @@ def excluir_categoria(request):
         messages.success(request,"Categoria excluída!")
         return redirect('exibir_categoria')
 
-    
+def cadastro_tarefa(request):
+    if request.method == "POST":
+        form = TarefaForm(request.POST)
+        nome = request.POST['nome']
+        buscar_repetido = Tarefa.objects.filter(nome__iexact = nome).count()
+        if form.is_valid():
+            if buscar_repetido > 0:
+                messages.warning(request,"Nome da Tarefa repetida!")
+                return redirect('index')
+            else:
+                tarefa = form.save(commit=False)
+                categoria = Categoria.objects.get(pk = request.POST['categoria'] )
+                tarefa.categoria = categoria
+                tarefa.save()
+                messages.success(request,"Tarefa cadastrada")
+                return redirect('index')
+
+    #else:
+        #form = QuadroForm()
+    categorias = Categoria.objects.all()
+    return render(request,'taskProject/criar_tarefa.html',{'categorias':categorias})   
+
+
+
+def listar_tarefas(request,id):
+    #quadros = Quadro.objects.all()
+    return render(request, 'taskProject/listar_tarefas.html')
