@@ -104,3 +104,84 @@
       })
       </script>
 </html>
+
+
+<!-- 
+{% block content %}
+
+            {% include "messagens.html" %}
+            
+            <div >
+                <h3 style = "display: inline-block"><strong>Quadros</strong></h3>
+                <a style = "display: inline-block; margin-left: 850px; padding:10px; color:#fff; border-radius: 5px; margin-top:10px;margin-bottom:3px; " type = "button" class = "bg-primary" href = "{% url 'cadastro_quadro' %}" >Adicionar</a>
+            </div>
+
+            <div>
+            {% for quadro in quadros %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{quadro.nome}}</h5>
+                            <p class="card-text">{{quadro.descricao |default_if_none:""}}</p>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <a href="#" class=" btn-primary btn-sm">Entrar</a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <a href="{% url 'editar_quadro' quadro.id %}" class=" btn-success btn-sm">Editar</a>
+                                </div>
+                                <div class="col-sm-4">
+                                <a style = "cursor:pointer" class=" btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal" data-quadroid = {{quadro.id}}>
+                                    Excluir
+                                </a>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+            </div>
+        </div>
+    </body>
+
+      Modal Confirmação de exclusão 
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Confirmar Exclusão</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form method = "POST" action = "{% url 'excluir_quadro' %}"> {% csrf_token %}
+
+            <div class="modal-body">
+              <h3>Deseja mesmo excluir?</h3>
+              <input type = "hidden" name = "quadro_id" id = "quadro_id">
+            </div>
+            
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success" >Confirmar</button>
+              <button type="button"  class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </body>
+     <script type="text/javascript">
+      $('#exampleModal').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var quadro_id = button.data('quadroid') // Extract info from data-* attributes
+          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+          var modal = $(this)
+          modal.find('.modal-body #quadro_id').val(quadro_id)
+      })
+      </script>
+
+{% endblock content %} -->
