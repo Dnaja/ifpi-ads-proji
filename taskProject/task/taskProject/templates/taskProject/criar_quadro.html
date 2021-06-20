@@ -1,67 +1,53 @@
-{% load static%}
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Tasks</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'taskProject/css/criar-tarefa.css' %}">
-
-
-</head>
-<body>
-        
-    <div id="corpo">
-        <div class="top">
-            <div class="title">
-                <h1>Tasks</h1>
-            </div>
-            <nav class="nav-bar">
-                <ul>
-                    <li><a href="#">HOME</a></li>
-                    <li><a href="#">GRÁFICO</a></li>
-                    <li><a href="#">DICAS</a></li>
-                    <li><a href="#">AVISE-ME</a></li>
-                    <li><a href="#">SOBRE</a></li>
-                </ul>
-            </nav>
-            
-        </div>
-        <div class="content">
+{% extends 'taskProject/barra_superior.html' %}
+{% block content %}
+        {% include 'messagens.html' %} 
 
             <div class="title">
                 <h1>Criar Quadro</h1>
             </div>
-            <div class="form">
-                <form action="" method="post">{% csrf_token %}
-                    <div class="row">
-                        <div class="col-1">
-                            <label for="nome">Nome:</label>
-                            <input type="text" name="nome"  required = "" >
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <label for="descricao">Descrição:</label>
-                            <textarea name="descricao"  cols="75" rows="10"></textarea>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="footer">
+            <div class="row form justify-content-center">
+                <div class="col">
+                    <form action="" method="post">{% csrf_token %}
                         <div class="row">
-                            <div class = "buttons">
-                                <button type="button" class = "btn btn-cancel">Cancelar</button>
-                                <button type="submit" class = "btn btn-ok">Confirmar</button>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="nome">Nome:</label>
+                                    <input type="text" name="nome"  required = "" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <label for="descricao">Descrição:</label>
+                                    <textarea id = 'descricao' name = 'descricao' width= '10' heigth = '20' rows="10" class="form-control"></textarea>                                     
+                                </div>
                                 
                             </div>
                         </div>
-                    </div>
-                </form>
-
+                        <br>
+                        <div class="footer">
+                            <div class="row">
+                                <div class = "buttons">
+                                    <button type="button" class = "btn btn-cancel" >Cancelar</button>
+                                    <button type="submit" class = "btn btn-ok">Confirmar</button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-    </div>
-</body>
-</html>
+
+    
+
+    {% endblock content %}
+   
+   
+   
+   
+<!-- 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home - Tasks</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'taskProject/css/criar-tarefa.css' %}"> -->
