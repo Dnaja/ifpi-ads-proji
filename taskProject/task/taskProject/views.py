@@ -122,7 +122,9 @@ def cadastro_tarefa(request):
             else:
                 tarefa = form.save(commit=False)
                 categoria = Categoria.objects.get(pk = request.POST['categoria'] )
+                quadro = Quadro.objects.get(pk = 18 )
                 tarefa.categoria = categoria
+                tarefa.quadro = quadro
                 tarefa.save()
                 messages.success(request,"Tarefa cadastrada")
                 return redirect('index')
@@ -135,5 +137,22 @@ def cadastro_tarefa(request):
 
 
 def listar_tarefas(request,id):
+    quadro = Quadro.objects.get(id = id)
+    tarefas = quadro.tarefas.all()
+    tarefas_pendentes = quadro.tarefas.filter(status = "1")
+    tarefas_em_andamento = quadro.tarefas.filter(status = "2")
+    tarefas_concluidas = quadro.tarefas.filter(status = "3")
     #quadros = Quadro.objects.all()
-    return render(request, 'taskProject/listar_tarefas.html')
+    return render(request, 'taskProject/listar_tarefas.html',
+    {
+        'tarefas_pendentes':tarefas_pendentes,
+        'tarefas_em_andamento' : tarefas_em_andamento,
+        'tarefas_concluidas': tarefas_concluidas
+
+    })
+
+def visualizar_modal_form(request,id):
+    tarefa = Tarefa.objects.filter(id = id)
+    return render(request, 'taskProject/listar_tarefas.html', {'tarefa': tarefa})
+
+

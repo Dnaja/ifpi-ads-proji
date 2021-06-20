@@ -46,7 +46,7 @@
                             <p class="card-text">{{quadro.descricao |default_if_none:""}}</p>
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <a href="#" class=" btn-primary btn-sm">Entrar</a>
+                                    <a href="{% url 'listar_tarefas' quadro.id %}" class=" btn-primary btn-sm">Entrar</a>
                                 </div>
                                 <div class="col-sm-4">
                                     <a href="{% url 'editar_quadro' quadro.id %}" class=" btn-success btn-sm">Editar</a>
