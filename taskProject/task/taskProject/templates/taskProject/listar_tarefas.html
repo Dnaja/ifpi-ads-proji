@@ -78,11 +78,11 @@
     </div>
 
     <!-- Modal Confirmação de exclusão -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Confirmar Exclusão</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -125,7 +125,7 @@
 
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="horario_previsao_termino">Data Previsão de Término:</label>
+                                    <label for="horario_previsao_termino">Horário Previsão de Término:</label>
                                     <input type="time" name="horario_previsao_termino"  id = "horario_previsao_termino"  class="form-control"  >    
                                 </div>
                                 
@@ -155,10 +155,10 @@
                         <input type = "hidden" name = "categoria_id" id = "categoria_id">
                     </div>
                     
-                    <div class="modal-footer">
+                    {% comment %} <div class="modal-footer">
                         <button type="submit" class="btn btn-success" >Confirmar</button>
                         <button type="button"  class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    </div>
+                    </div> {% endcomment %}
                 </form>
             </div>
         </div>
@@ -166,29 +166,29 @@
 
     <script type="text/javascript">
         $('#exampleModal').on('show.bs.modal', function (event) {
-            $.ajax({
-                url: "task/tarefa/1",
-                type: 'POST',
-                data: {'tarefa_id':tarefa_id},
-                dataType: 'json',
-                success: function (data) {
-                    {% comment %} if (data.is_taken) {
-                        alert(data.error_message);
-                    } {% endcomment %}
-                },error:function(){
-                    console.log('error');
-                },
-            });
             
             var button = $(event.relatedTarget) // Button that triggered the modal
             var tarefa_id = button.data('tarefa-id') // Extract info from data-* attributes
             var form = document.querySelector("form");
-            var a = button.attr("data-modal-form-url");
-             
+            $.ajax({
+                url: button.attr("data-modal-form-url"),
+                type: 'GET',
+                data: {'tarefa_id':tarefa_id},
+                dataType: 'json',
+                success: function (data) {
+                    var json = JSON.parse(data.tarefa);
+                    console.log(json);
+                    modal.find('.modal-body #nome').val(json[0].fields.nome);
+                    modal.find('.modal-title').html(json[0].fields.nome);      
+                    modal.find('.modal-body #data_previsao_termino').val(json[0].fields.data_previsao_termino);
+                },error:function(e){
+                    console.log(e);
+                },
+            }); 
             var modal = $(this)
             //modal.find('.modal-body #categoria_id').val(categoria_id)
         })
-      </script>
+    </script>
 
 {% endblock content %}
 

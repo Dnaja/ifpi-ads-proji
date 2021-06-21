@@ -2,6 +2,9 @@ from django.shortcuts import render,redirect,reverse
 from .forms import QuadroForm,CategoriaForm, TarefaForm
 from .models import Quadro,Categoria, Tarefa
 from django.contrib import messages
+from django.http import JsonResponse
+from django.core import serializers
+
 
 def index(request):
     quadros = Quadro.objects.all()
@@ -152,7 +155,11 @@ def listar_tarefas(request,id):
     })
 
 def visualizar_modal_form(request,id):
-    tarefa = Tarefa.objects.filter(id = id)
-    return render(request, 'taskProject/listar_tarefas.html', {'tarefa': tarefa})
+
+    tarefa = Tarefa.objects.filter(pk = id)
+    data = serializers.serialize('json', tarefa)
+    data = {'tarefa' : data}
+    return JsonResponse(data)
+    #return render(request, 'taskProject/listar_tarefas.html', {'tarefa': tarefa})
 
 
