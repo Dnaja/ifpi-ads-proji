@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Quadro(models.Model):
 
     nome = models.CharField(max_length=30, null=False)
@@ -28,6 +29,6 @@ class Tarefa(models.Model):
     status = models.CharField(max_length=1,null = False, default='1',choices = [('1','Pendente'),('2', 'Em Andamento'),('3','Concluída')])
 
     def __str__(self):
-        return self.id +" - "+ self.nome 
+        return self.nome 
 
 

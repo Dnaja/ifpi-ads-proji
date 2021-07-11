@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     <label for="categoria">Categoria:</label>
                                     <select class="form-control" id = 'categoria' name = 'categoria'>
-                                        {% for categoria in  categorias %}
+                                        {% for categoria in categorias %}
                                             <option value = "{{categoria.id}}">{{categoria.nome}}</option>
                                         {% endfor %}
                                         
@@ -46,7 +46,7 @@
 
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="horario_previsao_termino">Data Previsão de Término:</label>
+                                    <label for="horario_previsao_termino">Horário Previsão de Término:</label>
                                     <input type="time" name="horario_previsao_termino"  id = "horario_previsao_termino"  class="form-control"  >    
                                 </div>
                                 
@@ -62,7 +62,13 @@
                                 
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <input type='hidden' id = "status" name = "status" value="1" ></input>                                     
+                                </div>           
+                            </div>
+                        </div>
                         <br>
                         <div class="footer">
                             <div class="row">

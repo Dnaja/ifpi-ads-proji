@@ -19,4 +19,4 @@ class TarefaForm(forms.ModelForm):
 
     class Meta:
         model = Tarefa
-        fields = ['nome', 'descricao','data_previsao_termino','categoria']
+        fields = ['nome', 'descricao','data_previsao_termino','horario_previsao_termino','status']

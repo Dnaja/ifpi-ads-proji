@@ -1,0 +1,27 @@
+{% extends 'taskProject/barra_superior_login.html' %}
+{% load crispy_forms_tags %}
+    {% block content %}
+        <div>
+            <h3 style="font-size: 28px;">Cadastre-se agora!</h3>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form method="post">{% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {{ form|crispy }}
+                    <div class="row">
+                        <div class="col">
+                            <p>Ao me cadastrar, concordo com os termos de uso e privacidade</p>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class = "btn btn-ok">Cadastrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endblock content %}

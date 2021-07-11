@@ -1,0 +1,29 @@
+{% extends 'taskProject/barra_superior_login.html' %}
+{% load crispy_forms_tags %}
+    {% block content %}
+        {% include 'messagens.html' %}
+        <div>
+            <h3 style="font-size: 24px;">Bem vindo ao Tasks</h3>
+            <h3 style="font-size: 28px;">Entre para gerenciar suas tarefas!</h3>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form action="" method="post">{% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {{ form|crispy }}
+                    <div class="row">
+                        <div class="col">
+                            <a href="#">esqueceu a senha?</a>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class = "btn btn-ok">Entrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endblock content %}

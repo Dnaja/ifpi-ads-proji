@@ -4,7 +4,11 @@ from .models import Quadro,Categoria, Tarefa
 from django.contrib import messages
 from django.http import JsonResponse
 from django.core import serializers
-
+from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth import authenticate, login
+from django.urls import reverse_lazy
+from django.views import generic
+import datetime
 
 def index(request):
     quadros = Quadro.objects.all()
@@ -118,10 +122,37 @@ def cadastro_tarefa(request):
         form = TarefaForm(request.POST)
         nome = request.POST['nome']
         buscar_repetido = Tarefa.objects.filter(nome__iexact = nome).count()
+        data_pt = request.POST['data_previsao_termino'] #Pega o valor dentro do campo data_previsao_termino
         if form.is_valid():
             if buscar_repetido > 0:
                 messages.warning(request,"Nome da Tarefa repetida!")
                 return redirect('index')
+            if data_pt != '': #verifica se a data tem ou não algo registrado
+                data_pt_ano = int(data_pt[0] + data_pt[1] + data_pt[2] + data_pt[3]) * 360#pega só o ano da data
+                data_pt_mes = int (data_pt[5] + data_pt[6]) * 30
+                data_pt_dia = int(data_pt[8] + data_pt[9])
+                quant_dias = data_pt_ano + data_pt_dia + data_pt_mes
+                quant_dias_atuais = datetime.date.today().year * 360
+                quant_dias_atuais += datetime.date.today().month * 30
+                quant_dias_atuais += datetime.date.today().day
+
+                if quant_dias < quant_dias_atuais: #Compara se a quantidade de dias da data é menor que a de dias atuais
+                    messages.warning(request,"Data de término não pode ser menor que a atual!")                
+                    return redirect('index')
+                if (quant_dias - quant_dias_atuais) > 30:
+                    messages.warning(request,"Data de término não pode ser superior a 30 dias!")                
+                    return redirect('index')
+                else:
+                    tarefa = form.save(commit=False)
+                    categoria = Categoria.objects.get(pk = request.POST['categoria'] )
+                    quadro = Quadro.objects.get(pk = 18 )
+                    tarefa.categoria = categoria
+                    tarefa.quadro = quadro
+                    tarefa.save()
+                    messages.success(request,"Tarefa cadastrada")
+                    return redirect('index')
+
+              #### Urgente, Conseguir transformar a data em número de dias e ver a diferença entre elas  
             else:
                 tarefa = form.save(commit=False)
                 categoria = Categoria.objects.get(pk = request.POST['categoria'] )
@@ -163,3 +194,7 @@ def visualizar_modal_form(request,id):
     #return render(request, 'taskProject/listar_tarefas.html', {'tarefa': tarefa})
 
 
+class SignUp(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/cadastro.html'
