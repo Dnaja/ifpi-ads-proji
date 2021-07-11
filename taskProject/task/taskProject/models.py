@@ -25,9 +25,13 @@ class Tarefa(models.Model):
     concluida = models.CharField(max_length = 1,null = True,blank=True)
     data_conclusao = models.DateField(null = True)
     quadro = models.ForeignKey(Quadro,on_delete=models.CASCADE,related_name="tarefas", null = False)
-    status = models.CharField(max_length=1,null = False, default='1',choices = [('1','Pendente'),('2', 'Em Andamento'),('3','Concluída')])
+    status = models.CharField(max_length=1,null = False, default='1')
 
     def __str__(self):
-        return self.id +" - "+ self.nome 
+        return  self.nome 
+
+    def iniciar_tarefa(self):
+        self.status = '2'
+        self.save()
 
 

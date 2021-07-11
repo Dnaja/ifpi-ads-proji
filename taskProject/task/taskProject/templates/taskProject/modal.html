@@ -1,17 +1,19 @@
-{% extends 'taskProject/barra_superior.html' %}
+{% block modal %}
 
-{% block content %}
-
-    {% include 'messagens.html' %}
-
-    <div class="title" >
-        <h2>Criar Tarefa</h2>
-    </div>
-
-    <div class="row form ">
-                <div class="col">
-                    <form action="" method="post">{% csrf_token %}
-
+<!-- Modal Confirmação de exclusão -->
+    <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method = "POST" action = "{% url 'atualizar_tarefa' %}"> {% csrf_token %}
+                    {% include 'messagens.html' %}
+                    <div class="modal-body">
+                        
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
@@ -46,7 +48,7 @@
 
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="horario_previsao_termino">Data Previsão de Término:</label>
+                                    <label for="horario_previsao_termino">Horário Previsão de Término:</label>
                                     <input type="time" name="horario_previsao_termino"  id = "horario_previsao_termino"  class="form-control"  >    
                                 </div>
                                 
@@ -65,26 +67,43 @@
 
                         <div class="row">
                             <div class="col">
-                                <div class="form-group">
-                                    <input type='hidden' id = "status" name = "status" value="1" ></input>                                     
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="iniciar_tarefa" id = "iniciar_tarefa" >
+                                    <label class="form-check-label" for="iniciar_tarefa"><strong>Iniciar Tarefa</strong></label>
+                                </div>
+                                
+                            </div>
+                        </div><div class="row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input type="hidden" class="form-check-input" name="id" id = "id" >
                                 </div>
                                 
                             </div>
                         </div>
 
+
+
                         <br>
                         <div class="footer">
                             <div class="row">
                                 <div class = "buttons">
-                                    <a  class ="btn bg-primary"  href="{% url 'exibir_categoria'  %}">Voltar</a>
-                                    <button type="submit" class = "btn btn-ok">Confirmar</button>
+                                    <button type="submit" class = "btn btn-success">Confirmar</button>
 
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <input type = "hidden" name = "categoria_id" id = "categoria_id">
+                    </div>
+                    
+                    {% comment %} <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" >Confirmar</button>
+                        <button type="button"  class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div> {% endcomment %}
+                </form>
             </div>
-    
+        </div>
+    </div>
+{% endblock modal %}
 
-{% endblock content %}
+

@@ -55,8 +55,14 @@ def editar_quadro(request,id):
 def excluir_quadro(request):
     print(request.POST)
     if request.method == "POST":
-            quadro = Quadro.objects.filter(pk=request.POST['quadro_id']).delete()
-            messages.success(request,"Quadro excluído!")
+            quadro = Quadro.objects.filter(pk=request.POST['quadro_id'])
+            tarefas_associadas = Tarefa.objects.filter(quadro_id = request.POST['quadro_id']).count()            
+            if (tarefas_associadas):
+                messages.error(request,"Exclusão não permitida. Quadro possui tarefas associadas!")
+            else:
+                quadro.delete()
+                messages.success(request,"Quadro excluído!")
+            
             return redirect('index')
 
 
@@ -113,7 +119,7 @@ def excluir_categoria(request):
         messages.success(request,"Categoria excluída!")
         return redirect('exibir_categoria')
 
-def cadastro_tarefa(request):
+def cadastro_tarefa(request,quadro_id):
     if request.method == "POST":
         form = TarefaForm(request.POST)
         nome = request.POST['nome']
@@ -125,7 +131,7 @@ def cadastro_tarefa(request):
             else:
                 tarefa = form.save(commit=False)
                 categoria = Categoria.objects.get(pk = request.POST['categoria'] )
-                quadro = Quadro.objects.get(pk = 18 )
+                quadro = Quadro.objects.get(pk = quadro_id )
                 tarefa.categoria = categoria
                 tarefa.quadro = quadro
                 tarefa.save()
@@ -145,21 +151,50 @@ def listar_tarefas(request,id):
     tarefas_pendentes = quadro.tarefas.filter(status = "1")
     tarefas_em_andamento = quadro.tarefas.filter(status = "2")
     tarefas_concluidas = quadro.tarefas.filter(status = "3")
-    #quadros = Quadro.objects.all()
+    categorias = Categoria.objects.all()
     return render(request, 'taskProject/listar_tarefas.html',
     {
         'tarefas_pendentes':tarefas_pendentes,
         'tarefas_em_andamento' : tarefas_em_andamento,
-        'tarefas_concluidas': tarefas_concluidas
-
+        'tarefas_concluidas': tarefas_concluidas,
+        'categorias' : categorias,
+        'quadro' : id,
     })
 
 def visualizar_modal_form(request,id):
 
     tarefa = Tarefa.objects.filter(pk = id)
-    data = serializers.serialize('json', tarefa)
-    data = {'tarefa' : data}
+    
+    tarefa = serializers.serialize('json', tarefa)
+    data = {'tarefa' : tarefa}
     return JsonResponse(data)
-    #return render(request, 'taskProject/listar_tarefas.html', {'tarefa': tarefa})
+    
 
+def atualizar_tarefa(request):
+    if (request.method == 'POST'):
+        id = request.POST.get("id")
+        tarefa = Tarefa.objects.get(pk = id)
+        form = TarefaForm(request.POST,instance=tarefa)
+        if (form.is_valid()):
+            form = form.save(commit=False)
+            categoria = Categoria.objects.get(pk = request.POST['categoria'])
+            form.categoria = categoria
+            quadro = tarefa.quadro
+            #form.quadro = quadro
+            #form.status = tarefa.status
+            form.save()
+            return redirect('listar_tarefas',id = quadro.pk)
+        else:
+            messages.success(request,"teste")
+            return redirect('listar_tarefas',id = 18)
+
+def excluir_tarefa(request):
+    if request.method == "POST":
+        tarefa = Tarefa.objects.get(pk=request.POST['tarefa_id'])
+        if (tarefa.status == '2'):
+            messages.error(request,"Nâo é possível excluir tarefas Em Andamento !")
+        else:
+            tarefa.delete()
+            messages.success(request,"Tarefa excluída!")
+        return redirect('index')
 
