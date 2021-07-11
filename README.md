@@ -16,6 +16,6 @@
 # Regras de Negócios
 ## Principais:
 - Um usuário só poderá excluir um quadro se o mesmo estiver vazio.
-- Um usuário só poderá dar um determinado nome para um quadro se não existir outro com mesmo nome, isso se aplica também às tarefas e categorias.
-- Um usuário só poderá excluir uma categoria se ela não estiver em uso em alguma tarefa.
+- Um usuário não pode criar tarefas com data/horário menor que o atual;
+- Não ser possível cadastrar tarefas com prazo de execução com mais de 6 meses;
 
