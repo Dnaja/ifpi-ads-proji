@@ -14,7 +14,6 @@ urlpatterns = [
     path('categoria/', views.exibir_categoria, name='exibir_categoria'),
     path('categoria/editar/<int:id>/', views.editar_categoria, name='editar_categoria'),
     path('categoria/excluir/', views.excluir_categoria, name='excluir_categoria'),
-
     path('tarefa/cadastro/<int:quadro_id>/', views.cadastro_tarefa, name='cadastro_tarefa'),
     path('tarefa/<int:id>', views.visualizar_modal_form, name='visualizar_modal_form'),
     path('tarefa/edit/', views.atualizar_tarefa, name='atualizar_tarefa'),
