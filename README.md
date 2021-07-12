@@ -15,7 +15,10 @@
 
 # Regras de Negócios
 ## Principais:
-- Um usuário só poderá excluir um quadro se o mesmo estiver vazio.
-- Um usuário não pode criar tarefas com data/horário menor que o atual;
-- Não ser possível cadastrar tarefas com prazo de execução com mais de 6 meses;
+- Um usuário só poderá excluir um quadro se o mesmo estiver vazio;
+- Quando uma tarefa é criada seu status é setado como Pendente;
+- A data e horário de previsão de entrega não são obrigatórias quando a tarefa está com status Pendente;
+- Um usuário não pode criar tarefas com data/horário de previsão de entrega menor que o atual;
+- Um usuário não pode criar tarefas com data de previsão de entrega em um intervalo maior que 30 dias;
+- Após concluída, uma tarefa não poderá mais ser alterada;
 
