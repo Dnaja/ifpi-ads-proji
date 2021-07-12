@@ -14,13 +14,14 @@ urlpatterns = [
     path('categoria/', views.exibir_categoria, name='exibir_categoria'),
     path('categoria/editar/<int:id>/', views.editar_categoria, name='editar_categoria'),
     path('categoria/excluir/', views.excluir_categoria, name='excluir_categoria'),
-    path('tarefa/cadastro/', views.cadastro_tarefa, name='cadastro_tarefa'),
+
+    path('tarefa/cadastro/<int:quadro_id>/', views.cadastro_tarefa, name='cadastro_tarefa'),
     path('tarefa/<int:id>', views.visualizar_modal_form, name='visualizar_modal_form'),
+    path('tarefa/edit/', views.atualizar_tarefa, name='atualizar_tarefa'),
+    path('tarefa/excluir/', views.excluir_tarefa, name='excluir_tarefa'),
     path('accounts/cadastro/', views.SignUp.as_view(), name="signup"),
     path('accounts/', include('django.contrib.auth.urls'))
-    # path('login/', auth_views.LoginView.as_view(
-    #     template_name='taskProject/login.html'
-    # ), name="login"),
-    # path('logar_usuario/', views.logar_usuario, name='logar_usuario'),
-    # path('cadastrar/',views.SignUp.as_view(), name="signup")
+    
 ]
+
+

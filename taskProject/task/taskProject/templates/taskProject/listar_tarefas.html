@@ -1,14 +1,14 @@
 {% extends 'taskProject/barra_superior.html' %}
 
 {% block content %}
-
+    
     <div class="" >
         <div class="" style="text-align:right; margin-bottom:20px;">
-            <a class="botao btn-lg btn-info" href="{% url 'cadastro_tarefa' %}" >Adicionar Tarefa</a>
+            <a class="botao btn-lg btn-info" href="{% url 'cadastro_tarefa' quadro %}" >Adicionar Tarefa</a>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style = 'margin-bottom:40px;'>
         <div class="col-sm-4">
 
 
@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <div class= "lista-tarefas">
+            <div class= "lista-tarefas" >
                 {% for tarefa_pendente in tarefas_pendentes %}
                     <div class="row">
                         <div class="col">
@@ -26,7 +26,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{tarefa_pendente.nome}}</h5>
                                     <p class="card-text">{{tarefa_pendente.descricao |default_if_none:""}}</p>
-                                    <a href="#" class="btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" data-tarefa-id = "{{ tarefa_pendente.id }}" data-modal-form-url = "{% url 'visualizar_modal_form' tarefa_pendente.id %}">Ver detalhes</a>
+                                    <a href="{% url 'visualizar_modal_form' tarefa_pendente.id %}" class="btn-sm btn-primary" data-toggle="modal" data-target = "#exampleModal"  data-tarefa-id = "{{ tarefa_pendente.id }}" data-modal-form-url = "{% url 'visualizar_modal_form' tarefa_pendente.id %}">Ver detalhes</a>
                                 </div>
                             </div>
                         </div>
@@ -44,11 +44,15 @@
             </div>
             <div class= "lista-tarefas">
                 {%for tarefa_em_andamento in tarefas_em_andamento%}
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{tarefa_em_andamento.nome}}</h5>
-                            <p class="card-text">{{tarefa_em_andamento.descricao|default_if_none:""}}</p>
-                            <a href="#" class="btn btn-primary">Visitar</a>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card card-tarefa" >
+                                <div class="card-body">
+                                    <h5 class="card-title">{{tarefa_em_andamento.nome}}</h5>
+                                    <p class="card-text">{{tarefa_em_andamento.descricao|default_if_none:""}}</p>
+                                    <a href="#" class="btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" data-tarefa-id = "{{ tarefa_pendente.id }}" data-modal-form-url = "{% url 'visualizar_modal_form' tarefa_em_andamento.id %}">Ver detalhes</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -65,6 +69,18 @@
 
             <div class= "lista-tarefas">
                 {% for tarefa_concluida in tarefas_concluidas  %}
+                    <div class="row">
+                        <div class="col">
+                            <div class="card card-tarefa" >
+                                <div class="card-body">
+                                    <h5 class="card-title">{{tarefa_concluida.nome}}</h5>
+                                    <p class="card-text">{{tarefa_concluida.descricao|default_if_none:""}}</p>
+                                    <a href="#" class="btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal" data-tarefa-id = "{{ tarefa_concluida.id }}" data-modal-form-url = "{% url 'visualizar_modal_form' tarefa_concluida.id %}">Ver detalhes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment "" %}
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{tarefa_concluida.nome}}</h5>
@@ -72,12 +88,13 @@
                             <a href="#" class="btn btn-primary">Visitar</a>
                         </div>
                     </div>
+                    {% endcomment %}
                 {% endfor %}
             </div>
         </div>
     </div>
-
-    <!-- Modal Confirmação de exclusão -->
+    {% block modal %}{% endblock modal %}
+    <!-- Modal Tarefas -->
     <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="dialog">
             <div class="modal-content">
@@ -87,8 +104,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method = "POST" action = "{% url 'excluir_categoria' %}"> {% csrf_token %}
-
+                <form method = "POST" action = "{% url 'atualizar_tarefa' %}"> {% csrf_token %}
+                    {% include 'messagens.html' %}
                     <div class="modal-body">
                         
                         <div class="row">
@@ -112,7 +129,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="categoria">Categoria:</label>
-                                    <select class="form-control" id = 'categoria' name = 'categoria'>
+                                    <select class="form-control" id = 'categoria' name = 'categoria' required = "">
                                         {% for categoria in  categorias %}
                                             <option value = "{{categoria.id}}">{{categoria.nome}}</option>
                                         {% endfor %}
@@ -130,6 +147,17 @@
                                 </div>
                                 
                             </div>
+
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="status">Status:</label>
+                                    <select class="form-control " id = 'status' onclick="iniciarTarefa();" name = 'status' required = "">
+                                        
+                                    </select>
+                                                              
+                                </div>
+                                
+                            </div>
                         </div>
 
                         <div class="row">
@@ -141,28 +169,46 @@
                                 
                             </div>
                         </div>
+                         <div class="row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input type="hidden" class="form-check-input" name="id" id = "id" >
+                                    <input type = "hidden" name = "categoria_id" id = "categoria_id">
+                                </div>
+                            </div>
+                        </div>
+                        </div>
 
                         <br>
                         <div class="footer">
                             <div class="row">
-                                <div class = "buttons">
-                                    <a  class ="btn bg-primary"  href="{% url 'exibir_categoria'  %}">Voltar</a>
-                                    <button type="submit" class = "btn btn-ok">Confirmar</button>
-
+                                <div class="col">
+                                    <button type="submit" id="confirmar" class = "btn btn-success">Confirmar</button>
+                                </div>
+                                </form>
+                                <div class="col">
+                                    <form action = "{% url 'excluir_tarefa' %}" method='POST'>{% csrf_token %}
+                                        <input type='hidden' id = 'tarefa_id' name='tarefa_id'></input>
+                                        <input type='hidden' id = 'quadro_id' name='quadro_id'></input>
+                                        <button type="submit" id="excluir" class = "btn btn-danger">Excluir</button>
+                                    </form>
                                 </div>
                             </div>
+
                         </div>
-                        <input type = "hidden" name = "categoria_id" id = "categoria_id">
+                        
+                        
                     </div>
                     
                     {% comment %} <div class="modal-footer">
                         <button type="submit" class="btn btn-success" >Confirmar</button>
                         <button type="button"  class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     </div> {% endcomment %}
-                </form>
+                
             </div>
         </div>
     </div>
+
 
     <script type="text/javascript">
         $('#exampleModal').on('show.bs.modal', function (event) {
@@ -176,18 +222,131 @@
                 data: {'tarefa_id':tarefa_id},
                 dataType: 'json',
                 success: function (data) {
-                    var json = JSON.parse(data.tarefa);
-                    console.log(json);
-                    modal.find('.modal-body #nome').val(json[0].fields.nome);
-                    modal.find('.modal-title').html(json[0].fields.nome);      
-                    modal.find('.modal-body #data_previsao_termino').val(json[0].fields.data_previsao_termino);
+                    console.log(data)
+                    var tarefa = JSON.parse(data.tarefa)[0];
+                    console.log(tarefa)
+                    console.log(data.url)
+
+                    var tarefa = JSON.parse(data.tarefa)[0];
+                    var statusTarefa = tarefa.fields.status
+
+                    modal.find('.modal-body #nome').val(tarefa.fields.nome);
+                    modal.find('.modal-body #data_previsao_termino').val(tarefa.fields.data_previsao_termino);
+                    modal.find('.modal-body #categoria').val(tarefa.fields.categoria);
+                    modal.find('.modal-body #descricao').val(tarefa.fields.descricao);
+                    modal.find('.modal-body #id').val(tarefa.pk);
+                    modal.find('.footer #tarefa_id').val(tarefa.pk);
+                    modal.find('.modal-title').html(tarefa.fields.nome);
+                    modal.find('.modal-body #horario_previsao_termino').val(tarefa.fields.horario_previsao_termino);
+
+                    var selectStatus = document.querySelector('#status');
+                    var status = {'1':'Pendente','2':'Em Andamento','3':'Concluida'}; 
+                    if (statusTarefa === '1'){
+                        var optionStatus =  document.createElement("option");
+                        optionStatus.text = 'Pendente';
+                        optionStatus.value = '1';
+                        optionStatus.selected = true;
+                        selectStatus.add(optionStatus);
+                        optionStatus =  document.createElement("option");
+                        optionStatus.text = 'Em Andamento';
+                        optionStatus.value = '2';
+                        selectStatus.add(optionStatus);
+
+                        modal.find('.modal-body #nome').prop("readonly",false);
+                        modal.find('.modal-body #data_previsao_termino').prop("readonly",false);
+                        modal.find('.modal-body #categoria').prop("disabled",false);
+                        modal.find('.modal-body #descricao').prop("readonly",false);
+                        modal.find('.modal-body #id').prop("readonly",false);
+                        modal.find('.modal-body #status').prop("disabled",false);
+                        modal.find('.modal-title').prop("readonly",false);
+                        modal.find('.modal-body #horario_previsao_termino').prop("readonly",false);
+                        modal.find('.footer #confirmar').show();
+                        modal.find('.footer #excluir').show();
+
+                    }else if (statusTarefa === '2'){
+                        var optionStatus =  document.createElement("option");
+                        optionStatus.text = 'Pendente';
+                        optionStatus.value = '1';
+                        selectStatus.add(optionStatus);
+                        optionStatus =  document.createElement("option");
+                        optionStatus.text = 'Em Andamento';
+                        optionStatus.value = '2';
+                        optionStatus.selected = true;
+                        selectStatus.add(optionStatus);
+                        optionStatus =  document.createElement("option");
+                        optionStatus.text = 'Concluida';
+                        optionStatus.value = '3';
+                        selectStatus.add(optionStatus);
+
+                        modal.find('.modal-body #nome').prop("readonly",false);
+                        modal.find('.modal-body #data_previsao_termino').prop("readonly",false);
+                        modal.find('.modal-body #categoria').prop("disabled",false);
+                        modal.find('.modal-body #descricao').prop("readonly",false);
+                        modal.find('.modal-body #id').prop("readonly",false);
+                        modal.find('.modal-body #status').prop("disabled",false);
+                        modal.find('.modal-title').prop("readonly",false);
+                        modal.find('.modal-body #horario_previsao_termino').prop("readonly",false);
+                        modal.find('.footer #confirmar').show();
+                        modal.find('.footer #excluir').hide();
+
+                    }else if (statusTarefa === '3'){
+                        var optionStatus =  document.createElement("option");
+                        optionStatus.text = 'Concluida';
+                        optionStatus.value = '3';
+                        optionStatus.selected = true;
+                        selectStatus.add(optionStatus);
+
+                        modal.find('.modal-body #nome').prop("readonly",true);
+                        modal.find('.modal-body #data_previsao_termino').prop("readonly",true);
+                        modal.find('.modal-body #categoria').prop("disabled",true);
+                        modal.find('.modal-body #descricao').prop("readonly",true);
+                        modal.find('.modal-body #id').prop("readonly",true);
+                        modal.find('.modal-body #status').prop("disabled",true);
+                        modal.find('.modal-title').prop("readonly",true);
+                        modal.find('.modal-body #horario_previsao_termino').prop("readonly",true);
+                        modal.find('.footer #confirmar').hide();
+                        modal.find('.footer #excluir').show();
+                    }
+
                 },error:function(e){
-                    console.log(e);
+                    console.log("Error: " + e);
                 },
             }); 
             var modal = $(this)
             //modal.find('.modal-body #categoria_id').val(categoria_id)
         })
+        function iniciarTarefa (){
+            var iniciar = document.querySelector("#status").value;
+            if (iniciar === '2'){
+                document.querySelector("#data_previsao_termino").required = true;
+                document.querySelector("#horario_previsao_termino").required = true;
+            }else{
+                document.querySelector("#data_previsao_termino").required = false;
+                document.querySelector("#horario_previsao_termino").required = false;
+            }
+        }
+         function validarDataEHoraPrevisaoParaIniciarTarefa (event){
+            var iniciar = document.querySelector("#status").value;
+            var dataPrevisaoTermino = document.querySelector("#data_previsao_termino").value;
+            var horarioPrevisaoTermino = document.querySelector("#horario_previsao_termino").value;
+            if (!dataPrevisaoTermino || !horarioPrevisaoTermino){
+                event.preventDefault();
+                Swal.fire({
+                  title: 'Preencher campos!',
+                  text: 'Necessário preencher Data Previsão Término e  Horário Previsão de Término para iniciar uma tarefa!',
+                  icon: 'warning',
+                  confirmButtonText: 'OK'
+                })
+
+            }
+            /*
+            else{
+                document.querySelector("#data_previsao_termino").required = false;
+                document.querySelector("#horario_previsao_termino").required = false;
+            }
+            */
+        }
+
     </script>
 
 {% endblock content %}
