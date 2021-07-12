@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from django.template.response import TemplateResponse
-# from django.contrib.auth import views as auth_views
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
@@ -20,7 +20,8 @@ urlpatterns = [
     path('tarefa/edit/', views.atualizar_tarefa, name='atualizar_tarefa'),
     path('tarefa/excluir/', views.excluir_tarefa, name='excluir_tarefa'),
     path('accounts/cadastro/', views.SignUp.as_view(), name="signup"),
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout')
     
 ]
 

@@ -134,4 +134,4 @@ MESSAGE_TAGS = {
 #Configuração de autenticação
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = '/task'
-LOGOUT_REDIRECT_URL = '/accounts/login'
+LOGOUT_REDIRECT_URL = '/task/accounts/login'

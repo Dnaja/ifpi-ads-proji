@@ -119,7 +119,7 @@
                             <div class="col-4">
                                 <div class="form-group">
                                     <label for="data_previsao_termino">Data Previsão de Término:</label>
-                                    <input type="date" name="data_previsao_termino"  id = "data_previsao_termino"  class="form-control"  >    
+                                    <input type="date" name="data_previsao_termino"  id = "data_previsao_termino"  class="form-control"   >    
                                 </div>
                                 
                             </div>
@@ -183,7 +183,7 @@
                         <div class="footer">
                             <div class="row">
                                 <div class="col">
-                                    <button type="submit" id="confirmar" class = "btn btn-success">Confirmar</button>
+                                    <button type="submit" id="confirmar" onclick="validacoes(event);" class = "btn btn-success">Confirmar</button>
                                 </div>
                                 </form>
                                 <div class="col">
@@ -345,6 +345,55 @@
                 document.querySelector("#horario_previsao_termino").required = false;
             }
             */
+        }
+        function validarData(e){
+            // var today = new Date();
+            // var data = e.value;
+            // var partesData = data.split("-");
+            // console.log(partesData); 
+            
+
+            var strData = "12/07/2021";
+            var data = e.value;
+            var partesData = data.split("-");
+            console.log(partesData)
+            var data = new Date(partesData[0], partesData[1] - 1, partesData[2]);
+            
+            if(data < new Date()){
+                Swal.fire(
+                'Data Inválida',
+                'A data deve ser maior que a data atual',
+                'warning'
+                )
+
+            }
+        }
+        function validacoes(e){        
+            var data = $('#data_previsao_termino').val();
+            var partesData = data.split("-");
+            data = new Date(partesData[0], partesData[1] - 1, partesData[2]);
+            var date2 = new Date();
+            var timeDiff = Math.abs(data.getTime() - date2.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+
+            if(data < date2){
+                event.preventDefault();
+                Swal.fire(
+                'Data Inválida',
+                'A data deve ser maior que a data atual',
+                'warning'
+                )
+            }
+            else{
+                if (diffDays > 30){
+                    event.preventDefault();
+                    Swal.fire(
+                    'Data Inválida',
+                    'A data de término não pode ser superior a 30 dias',
+                    'warning'
+                    )
+                }
+            }
         }
 
     </script>

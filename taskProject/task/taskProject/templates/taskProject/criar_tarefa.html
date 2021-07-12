@@ -79,7 +79,7 @@
                             <div class="row">
                                 <div class = "buttons">
                                     <a  class ="btn bg-primary"  href="{% url 'exibir_categoria'  %}">Voltar</a>
-                                    <button type="submit" class = "btn btn-ok">Confirmar</button>
+                                    <button type="submit" class = "btn btn-ok" onclick="validacoes(event)">Confirmar</button>
 
                                 </div>
                             </div>
@@ -87,6 +87,35 @@
                     </form>
                 </div>
             </div>
-    
+
+            <script>
+                function validacoes(e){        
+                    var data = $('#data_previsao_termino').val();
+                    var partesData = data.split("-");
+                    data = new Date(partesData[0], partesData[1] - 1, partesData[2]);
+                    var date2 = new Date();
+                    var timeDiff = Math.abs(data.getTime() - date2.getTime());
+                    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+
+                    if(data < date2){
+                        event.preventDefault();
+                        Swal.fire(
+                        'Data Inválida',
+                        'A data deve ser maior que a data atual',
+                        'warning'
+                        )
+                    }
+                    else{
+                        if (diffDays > 30){
+                            event.preventDefault();
+                            Swal.fire(
+                            'Data Inválida',
+                            'A data de término não pode ser superior a 30 dias',
+                            'warning'
+                            )
+                        }
+                    }
+                }
+            </script>
 
 {% endblock content %}

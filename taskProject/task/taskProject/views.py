@@ -9,10 +9,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 import datetime
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='accounts/login/')
 def index(request):
     quadros = Quadro.objects.all()
     return render(request, 'taskProject/index.html',{'quadros':quadros})
+
 
 def cadastro_quadro(request):
     if request.method == "POST":
@@ -133,30 +136,31 @@ def cadastro_tarefa(request,quadro_id):
             if buscar_repetido > 0:
                 messages.warning(request,"Nome da Tarefa repetida!")
                 return redirect('index')
-            if data_pt != '': #verifica se a data tem ou não algo registrado
-                data_pt_ano = int(data_pt[0] + data_pt[1] + data_pt[2] + data_pt[3]) * 360#pega só o ano da data
-                data_pt_mes = int (data_pt[5] + data_pt[6]) * 30
-                data_pt_dia = int(data_pt[8] + data_pt[9])
-                quant_dias = data_pt_ano + data_pt_dia + data_pt_mes
-                quant_dias_atuais = datetime.date.today().year * 360
-                quant_dias_atuais += datetime.date.today().month * 30
-                quant_dias_atuais += datetime.date.today().day
+            # if data_pt != '': #verifica se a data tem ou não algo registrado
+            #     data_pt_ano = int(data_pt[0] + data_pt[1] + data_pt[2] + data_pt[3]) * 360#pega só o ano da data
+            #     data_pt_mes = int (data_pt[5] + data_pt[6]) * 30
+            #     data_pt_dia = int(data_pt[8] + data_pt[9])
+            #     quant_dias = data_pt_ano + data_pt_dia + data_pt_mes
+            #     quant_dias_atuais = datetime.date.today().year * 360
+            #     quant_dias_atuais += datetime.date.today().month * 30
+            #     quant_dias_atuais += datetime.date.today().day
 
-                if quant_dias < quant_dias_atuais: #Compara se a quantidade de dias da data é menor que a de dias atuais
-                    messages.warning(request,"Data de término não pode ser menor que a atual!")                
-                    return redirect('index')
-                if (quant_dias - quant_dias_atuais) > 30:
-                    messages.warning(request,"Data de término não pode ser superior a 30 dias!")                
-                    return redirect('index')
-                else:
-                    tarefa = form.save(commit=False)
-                    categoria = Categoria.objects.get(pk = request.POST['categoria'] )
-                    quadro = Quadro.objects.get(pk = 18 )
-                    tarefa.categoria = categoria
-                    tarefa.quadro = quadro
-                    tarefa.save()
-                    messages.success(request,"Tarefa cadastrada")
-                    return redirect('index')
+            #     if quant_dias < quant_dias_atuais: #Compara se a quantidade de dias da data é menor que a de dias atuais
+            #         messages.warning(request,"Data de término não pode ser menor que a atual!")                
+            #         return redirect('index')
+
+                # if (quant_dias - quant_dias_atuais) > 30:
+                #     messages.warning(request,"Data de término não pode ser superior a 30 dias!")                
+                #     return redirect('index')
+                # else:
+                #     tarefa = form.save(commit=False)
+                #     categoria = Categoria.objects.get(pk = request.POST['categoria'] )
+                #     quadro = Quadro.objects.get(pk = 18 )
+                #     tarefa.categoria = categoria
+                #     tarefa.quadro = quadro
+                #     tarefa.save()
+                #     messages.success(request,"Tarefa cadastrada")
+                #     return redirect('index')
 
               #### Urgente, Conseguir transformar a data em número de dias e ver a diferença entre elas  
             else:
